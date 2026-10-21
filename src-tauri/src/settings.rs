@@ -487,6 +487,8 @@ pub struct AppSettings {
     pub show_tray_icon: bool,
     #[serde(default = "default_paste_delay_ms")]
     pub paste_delay_ms: u64,
+    #[serde(default)]
+    pub markdown_processing_enabled: bool,
     #[serde(default = "default_paste_delay_after_ms")]
     pub paste_delay_after_ms: u64,
     /// Debug-gated ("beta") receipt-sequenced paste: restore the clipboard only
@@ -919,6 +921,17 @@ pub fn get_default_settings() -> AppSettings {
         },
     );
     bindings.insert(
+        "transcribe_slack".to_string(),
+        ShortcutBinding {
+            id: "transcribe_slack".to_string(),
+            name: "Transcribe (Slack)".to_string(),
+            description: "Converts your speech into text with Slack markdown formatting."
+                .to_string(),
+            default_binding: "ctrl+.".to_string(),
+            current_binding: "ctrl+.".to_string(),
+        },
+    );
+    bindings.insert(
         "cancel".to_string(),
         ShortcutBinding {
             id: "cancel".to_string(),
@@ -979,6 +992,7 @@ pub fn get_default_settings() -> AppSettings {
         keyboard_implementation: KeyboardImplementation::default(),
         show_tray_icon: default_show_tray_icon(),
         paste_delay_ms: default_paste_delay_ms(),
+        markdown_processing_enabled: false,
         paste_delay_after_ms: default_paste_delay_after_ms(),
         reliable_paste: false,
         typing_tool: default_typing_tool(),

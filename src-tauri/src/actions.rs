@@ -660,6 +660,26 @@ impl ShortcutAction for TranscribeAction {
                         Err(err) => Err(err),
                     };
 
+                    // Apply markdown voice commands after both the streaming and
+                    // batch paths so either source gets formatted:
+                    // - "transcribe" uses Markdown mode (standard markdown with **)
+                    // - "transcribe_slack" uses Slack mode (Slack markdown with *)
+                    let markdown_mode = if get_settings(&ah).markdown_processing_enabled {
+                        match binding_id.as_str() {
+                            "transcribe_slack" => Some(crate::audio_toolkit::MarkdownMode::Slack),
+                            "transcribe" => Some(crate::audio_toolkit::MarkdownMode::Markdown),
+                            _ => None,
+                        }
+                    } else {
+                        None
+                    };
+                    let transcription_result = match markdown_mode {
+                        Some(mode) => transcription_result.map(|text| {
+                            crate::audio_toolkit::process_markdown_commands(&text, mode)
+                        }),
+                        None => transcription_result,
+                    };
+
                     // Await WAV save and verify
                     let wav_saved = match wav_handle.await {
                         Ok(Ok(())) => {
@@ -862,6 +882,12 @@ pub static ACTION_MAP: Lazy<HashMap<String, Arc<dyn ShortcutAction>>> = Lazy::ne
     let mut map = HashMap::new();
     map.insert(
         "transcribe".to_string(),
+        Arc::new(TranscribeAction {
+            post_process: false,
+        }) as Arc<dyn ShortcutAction>,
+    );
+    map.insert(
+        "transcribe_slack".to_string(),
         Arc::new(TranscribeAction {
             post_process: false,
         }) as Arc<dyn ShortcutAction>,

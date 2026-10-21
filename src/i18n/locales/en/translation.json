@@ -172,6 +172,10 @@
             "name": "Transcribe Shortcut",
             "description": "The keyboard shortcut to record and transcribe your voice."
           },
+          "transcribe_slack": {
+            "name": "Transcribe (Slack) Shortcut",
+            "description": "The keyboard shortcut to record and transcribe with Slack markdown formatting."
+          },
           "cancel": {
             "name": "Cancel Shortcut",
             "description": "The keyboard shortcut to cancel the current recording."
@@ -561,6 +565,10 @@
       "appendTrailingSpace": {
         "label": "Append Trailing Space",
         "description": "Add a space after pasted transcription"
+      },
+      "markdownProcessing": {
+        "label": "Markdown Processing",
+        "description": "Convert voice commands starting with 'markdown' into formatting, e.g. 'markdown bold text markdown bold'"
       },
       "keyboardImplementation": {
         "title": "Keyboard Implementation",

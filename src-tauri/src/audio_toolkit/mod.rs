@@ -1,6 +1,7 @@
 pub mod audio;
 pub mod constants;
 pub mod lang_id;
+pub mod markdown;
 pub mod text;
 pub mod utils;
 pub mod vad;
@@ -10,6 +11,7 @@ pub use audio::{
     read_wav_samples, save_wav_file, verify_wav_file, AudioRecorder, CpalDeviceInfo, VadPolicy,
 };
 pub use lang_id::detect_output_language;
+pub use markdown::{process_markdown_commands, MarkdownMode};
 pub use text::{
     apply_custom_words, normalize_transcription_output, remove_filler_words, OutputLanguageEvidence,
 };

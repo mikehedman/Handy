@@ -1,3 +1,67 @@
+# HandsDown
+
+**HandsDown is a personal fork of [Handy](https://github.com/cjpais/Handy) that turns spoken commands into Markdown or Slack formatting as you dictate.**
+
+Say _"markdown bold"_ around a phrase and it's pasted as **bold**. Say _"markdown bullet"_ and you get a list item. Everything else, including offline transcription, models, and shortcuts, works the same as upstream Handy.
+
+> This is not the official Handy project. Please don't report HandsDown-specific
+> problems to the Handy maintainers. The original Handy README follows
+> [below](#handy).
+
+## What's different from Handy
+
+- **Markdown voice commands.** Every command starts with the keyword _"markdown"_, so ordinary words like "bold" or "bullet" in a sentence are never formatted by accident.
+- **Two output styles, one shortcut each.** The regular transcribe shortcut produces standard Markdown. A second **Transcribe (Slack)** shortcut (default `Ctrl+.`) produces Slack's mrkdwn.
+- **Forgiving matching.** Punctuation and capitals the speech model adds around commands are ignored, "mark down" works as the keyword, and common mishearings are accepted (e.g. _bald_ / _bolt_ → bold).
+
+### Commands
+
+| Say                                 | Markdown shortcut        | Slack shortcut |
+| ----------------------------------- | ------------------------ | -------------- |
+| "markdown bold … markdown bold"     | `**…**`                  | `*…*`          |
+| "markdown italic … markdown italic" | `*…*`                    | `_…_`          |
+| "markdown header one / two / three" | `#` / `##` / `###`       | bold line      |
+| "markdown bullet"                   | new line + `- `          | same           |
+| "markdown numbered bullet"          | new line + `1. `, `2. `… | same           |
+| "markdown new line"                 | line break               | same           |
+
+Example: _"markdown header one Meeting Notes markdown bullet Ship it markdown bold today markdown bold"_ becomes
+
+```text
+# Meeting Notes
+- Ship it **today**
+```
+
+### Turning it on
+
+Open **Settings → Advanced**, enable **Markdown Processing**, and set the **Transcribe (Slack)** shortcut if you want a different key. With the toggle off, HandsDown behaves exactly like Handy.
+
+> [!IMPORTANT]
+> **Slack:** after you paste, Slack may ask whether to apply the formatting.
+> Click **Apply**. Do **not** click **"Don't ask again"**.
+
+See [MARKDOWN_INTEGRATION.md](MARKDOWN_INTEGRATION.md) for implementation details and how to add new command words.
+
+## Building HandsDown
+
+There are no prebuilt HandsDown releases; build it from source. Prerequisites and platform setup are the same as Handy's (see [BUILD.md](BUILD.md)).
+
+```bash
+bun install
+# macOS: avoids a "-mcpu=native" build error in the speech engine
+export TRANSCRIBE_CMAKE_ARGS="-DGGML_NATIVE=OFF" CMAKE_POLICY_VERSION_MINIMUM=3.5
+bun run tauri dev        # run in development
+bun run deploy           # macOS: build and install to /Applications
+```
+
+HandsDown uses its own app identifier, so it installs alongside Handy without sharing settings.
+
+## Staying in sync with Handy
+
+HandsDown is kept as a single commit on top of the latest Handy release. Handy's features and fixes arrive by rebasing onto each new upstream release tag.
+
+---
+
 # Handy
 
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/WVBeWsNXK4)
